@@ -3,6 +3,7 @@ import data from './data.json';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Main from './components/Main';
+import { INITIAL_LOAD_COUNT, LOAD_MORE_COUNT } from './constants';
 import './App.css';
 
 function App() {
@@ -10,13 +11,13 @@ function App() {
   const [filteredData, setFilteredData] = useState([]);
   const [displayedItems, setDisplayedItems] = useState([]);
   const [filterTag, setFilterTag] = useState('');
-  const [visibleCount, setVisibleCount] = useState(50);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_LOAD_COUNT);
 
   // Initialize with first emoji selected and data sorted by order
   useEffect(() => {
     const sortedData = [...data].sort((a, b) => a.order - b.order);
     setFilteredData(sortedData);
-    setDisplayedItems(sortedData.slice(0, 50));
+    setDisplayedItems(sortedData.slice(0, INITIAL_LOAD_COUNT));
     if (sortedData.length > 0) {
       setSelectedEmoji(sortedData[0]);
     }
@@ -27,8 +28,8 @@ function App() {
     if (!filterTag.trim()) {
       const sortedData = [...data].sort((a, b) => a.order - b.order);
       setFilteredData(sortedData);
-      setDisplayedItems(sortedData.slice(0, 50));
-      setVisibleCount(50);
+      setDisplayedItems(sortedData.slice(0, INITIAL_LOAD_COUNT));
+      setVisibleCount(INITIAL_LOAD_COUNT);
       if (sortedData.length > 0) {
         setSelectedEmoji(sortedData[0]);
       }
@@ -38,8 +39,8 @@ function App() {
       ).sort((a, b) => a.order - b.order);
       
       setFilteredData(filtered);
-      setDisplayedItems(filtered.slice(0, 50));
-      setVisibleCount(50);
+      setDisplayedItems(filtered.slice(0, INITIAL_LOAD_COUNT));
+      setVisibleCount(INITIAL_LOAD_COUNT);
       if (filtered.length > 0) {
         setSelectedEmoji(filtered[0]);
       }
@@ -48,7 +49,7 @@ function App() {
 
   // Load more items when scrolling to bottom
   const loadMoreItems = useCallback(() => {
-    const nextCount = Math.min(visibleCount + 20, filteredData.length);
+    const nextCount = Math.min(visibleCount + LOAD_MORE_COUNT, filteredData.length);
     setDisplayedItems(filteredData.slice(0, nextCount));
     setVisibleCount(nextCount);
   }, [visibleCount, filteredData]);
@@ -75,8 +76,8 @@ function App() {
     ).sort((a, b) => a.order - b.order);
     
     setFilteredData(filtered);
-    setDisplayedItems(filtered.slice(0, 50));
-    setVisibleCount(50);
+    setDisplayedItems(filtered.slice(0, INITIAL_LOAD_COUNT));
+    setVisibleCount(INITIAL_LOAD_COUNT);
     if (filtered.length > 0) {
       setSelectedEmoji(filtered[0]);
     }

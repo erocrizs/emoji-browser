@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import VariantItem from './VariantItem';
+import { MIN_IMAGE_SIZE, SIDEBAR_BASE_WIDTH, SIDEBAR_PADDING } from '../constants';
 import './Sidebar.css';
 
 function Sidebar({ selectedEmoji, onTagClick }) {
@@ -17,10 +18,8 @@ function Sidebar({ selectedEmoji, onTagClick }) {
 
   // Calculate sidebar width based on image size
   const calculateSidebarWidth = () => {
-    const baseWidth = 350; // Base sidebar width
-    const padding = 60; // Total horizontal padding (1.5rem * 2 + some margin)
-    const requiredWidth = imageSize + padding;
-    return Math.max(baseWidth, requiredWidth);
+    const requiredWidth = imageSize + SIDEBAR_PADDING;
+    return Math.max(SIDEBAR_BASE_WIDTH, requiredWidth);
   };
 
   const handleDownload = () => {
@@ -74,9 +73,8 @@ function Sidebar({ selectedEmoji, onTagClick }) {
                   <input
                     type="number"
                     value={imageSize}
-                    onChange={(e) => setImageSize(Math.max(0, parseInt(e.target.value) || 0))}
-                    min="0"
-                    max="512"
+                    onChange={(e) => setImageSize(Math.max(MIN_IMAGE_SIZE, parseInt(e.target.value) || MIN_IMAGE_SIZE))}
+                    min={MIN_IMAGE_SIZE}
                   />
                 </div>
                 <button 
