@@ -66,6 +66,22 @@ function App() {
     setSelectedEmoji(emoji);
   };
 
+  // Handle tag click - set filter and refresh
+  const handleTagClick = (tag) => {
+    setFilterTag(tag);
+    // Apply filter immediately with the new tag
+    const filtered = data.filter(item => 
+      item.tags.some(itemTag => itemTag.toLowerCase().includes(tag.toLowerCase()))
+    ).sort((a, b) => a.order - b.order);
+    
+    setFilteredData(filtered);
+    setDisplayedItems(filtered.slice(0, 50));
+    setVisibleCount(50);
+    if (filtered.length > 0) {
+      setSelectedEmoji(filtered[0]);
+    }
+  };
+
   return (
     <div className="app">
       <Header 
@@ -75,7 +91,10 @@ function App() {
       />
 
       <div className="main-container">
-        <Sidebar selectedEmoji={selectedEmoji} />
+        <Sidebar 
+          selectedEmoji={selectedEmoji} 
+          onTagClick={handleTagClick}
+        />
         
         <Main 
           displayedItems={displayedItems}

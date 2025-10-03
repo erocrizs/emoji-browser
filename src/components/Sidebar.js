@@ -1,7 +1,7 @@
 import React from 'react';
 import './Sidebar.css';
 
-function Sidebar({ selectedEmoji }) {
+function Sidebar({ selectedEmoji, onTagClick }) {
   return (
     <aside className="sidebar">
       {selectedEmoji ? (
@@ -12,7 +12,6 @@ function Sidebar({ selectedEmoji }) {
               alt={selectedEmoji.annotation}
               className="emoji-image"
             />
-            <div className="emoji-text">{selectedEmoji.emoji}</div>
           </div>
           
           <div className="details-section">
@@ -43,7 +42,12 @@ function Sidebar({ selectedEmoji }) {
             <h3>Tags</h3>
             <div className="tags-container">
               {selectedEmoji.tags.map((tag, index) => (
-                <span key={index} className="tag">
+                <span 
+                  key={index} 
+                  className="tag clickable-tag"
+                  onClick={() => onTagClick(tag)}
+                  title={`Filter by "${tag}"`}
+                >
                   {tag}
                 </span>
               ))}

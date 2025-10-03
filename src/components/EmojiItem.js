@@ -16,7 +16,6 @@ function EmojiItem({ emoji, isSelected, onSelect }) {
         alt={emoji.annotation}
         className="emoji-grid-image"
       />
-      <div className="emoji-grid-text">{emoji.emoji}</div>
     </div>
   );
 }

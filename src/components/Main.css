@@ -6,14 +6,50 @@
   flex-direction: column;
 }
 
-.emoji-grid {
+.emoji-container {
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 1rem;
-  padding: 1.5rem;
   overflow-y: auto;
   background-color: #ffffff;
+}
+
+.group-section {
+  margin-bottom: 2rem;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem 0.5rem 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 2px solid #dee2e6;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.group-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.group-count {
+  font-size: 0.9rem;
+  color: #6c757d;
+  background-color: rgba(102, 126, 234, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 120px);
+  gap: 1rem;
+  padding: 1.5rem;
+  align-items: start;
 }
 
 .loading-indicator {
@@ -26,8 +62,16 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .group-header {
+    padding: 0.75rem 1rem 0.5rem 1rem;
+  }
+  
+  .group-header h2 {
+    font-size: 1rem;
+  }
+  
   .emoji-grid {
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    grid-template-columns: repeat(auto-fill, 80px);
     gap: 0.5rem;
     padding: 1rem;
   }
