@@ -1,10 +1,19 @@
 import React, { useState, useRef } from 'react';
+import VariantItem from './VariantItem';
 import './Sidebar.css';
 
 function Sidebar({ selectedEmoji, onTagClick }) {
   const [imageSize, setImageSize] = useState(80);
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const imageRef = useRef(null);
   const sidebarRef = useRef(null);
+
+  // Set default variant when emoji changes
+  React.useEffect(() => {
+    if (selectedEmoji) {
+      setSelectedVariant(selectedEmoji);
+    }
+  }, [selectedEmoji]);
 
   // Calculate sidebar width based on image size
   const calculateSidebarWidth = () => {
@@ -37,7 +46,7 @@ function Sidebar({ selectedEmoji, onTagClick }) {
           URL.revokeObjectURL(url);
         });
       };
-      img.src = `/svg/${selectedEmoji.src}`;
+      img.src = `/svg/${selectedVariant.src}`;
     }
   };
 
@@ -52,8 +61,8 @@ function Sidebar({ selectedEmoji, onTagClick }) {
           <div className="emoji-preview">
             <img 
               ref={imageRef}
-              src={`/svg/${selectedEmoji.src}`} 
-              alt={selectedEmoji.annotation}
+              src={`/svg/${selectedVariant?.src || selectedEmoji.src}`} 
+              alt={selectedVariant?.annotation || selectedEmoji.annotation}
               className="emoji-image"
               style={{ width: `${imageSize}px`, height: `${imageSize}px` }}
             />
@@ -79,6 +88,31 @@ function Sidebar({ selectedEmoji, onTagClick }) {
                 </button>
               </div>
             </div>
+            
+            {/* Skin Tone Variants */}
+            {selectedEmoji.skintone_variants && selectedEmoji.skintone_variants.length > 0 && (
+              <div className="variants-selection">
+                <h4>Skin Tone Variants</h4>
+                <div className="variants-grid">
+                  {/* Original emoji */}
+                  <VariantItem
+                    variant={selectedEmoji}
+                    isSelected={selectedVariant?.hexcode === selectedEmoji.hexcode && selectedVariant?.order === selectedEmoji.order}
+                    onSelect={setSelectedVariant}
+                  />
+                  
+                  {/* Variants */}
+                  {selectedEmoji.skintone_variants.map((variant, index) => (
+                    <VariantItem
+                      key={index}
+                      variant={variant}
+                      isSelected={selectedVariant?.hexcode === variant.hexcode && selectedVariant?.order === variant.order}
+                      onSelect={setSelectedVariant}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           
           <div className="details-section">
@@ -120,24 +154,6 @@ function Sidebar({ selectedEmoji, onTagClick }) {
               ))}
             </div>
           </div>
-
-          {selectedEmoji.skintone_variants && selectedEmoji.skintone_variants.length > 0 && (
-            <div className="variants-section">
-              <h3>Skin Tone Variants</h3>
-              <div className="variants-container">
-                {selectedEmoji.skintone_variants.map((variant, index) => (
-                  <div key={index} className="variant-item">
-                    <img 
-                      src={`/svg/${variant.src}`} 
-                      alt={variant.annotation}
-                      className="variant-image"
-                    />
-                    <span className="variant-text">{variant.emoji}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       ) : (
         <div className="no-selection">
