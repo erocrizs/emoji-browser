@@ -1,0 +1,23 @@
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+
+/* Main Container */
+.main-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+  }
+}

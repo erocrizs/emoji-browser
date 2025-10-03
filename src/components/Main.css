@@ -1,0 +1,34 @@
+/* Main Content */
+.main-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.emoji-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem;
+  overflow-y: auto;
+  background-color: #ffffff;
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: 1rem;
+  color: #6c757d;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .emoji-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+}
