@@ -11,6 +11,7 @@ function App() {
   const [filteredData, setFilteredData] = useState([]);
   const [displayedItems, setDisplayedItems] = useState([]);
   const [filterTag, setFilterTag] = useState('');
+  const [filterGroup, setFilterGroup] = useState('');
   const [visibleCount, setVisibleCount] = useState(INITIAL_LOAD_COUNT);
 
   // Initialize with first emoji selected and data sorted by order
@@ -23,29 +24,31 @@ function App() {
     }
   }, []);
 
-  // Filter data by tag
+  // Filter data by tag, annotation, and group
   const handleFilter = useCallback(() => {
-    if (!filterTag.trim()) {
-      const sortedData = [...data].sort((a, b) => a.order - b.order);
-      setFilteredData(sortedData);
-      setDisplayedItems(sortedData.slice(0, INITIAL_LOAD_COUNT));
-      setVisibleCount(INITIAL_LOAD_COUNT);
-      if (sortedData.length > 0) {
-        setSelectedEmoji(sortedData[0]);
-      }
-    } else {
-      const filtered = data.filter(item => 
-        item.tags.some(tag => tag.toLowerCase().includes(filterTag.toLowerCase()))
-      ).sort((a, b) => a.order - b.order);
-      
-      setFilteredData(filtered);
-      setDisplayedItems(filtered.slice(0, INITIAL_LOAD_COUNT));
-      setVisibleCount(INITIAL_LOAD_COUNT);
-      if (filtered.length > 0) {
-        setSelectedEmoji(filtered[0]);
-      }
+    let filtered = data;
+    
+    // Filter by group if selected
+    if (filterGroup) {
+      filtered = filtered.filter(item => item.group === filterGroup);
     }
-  }, [filterTag]);
+    
+    // Filter by tag or annotation if provided
+    if (filterTag.trim()) {
+      filtered = filtered.filter(item => 
+        item.tags.some(tag => tag.toLowerCase().includes(filterTag.toLowerCase())) ||
+        item.annotation.toLowerCase().includes(filterTag.toLowerCase())
+      );
+    }
+    
+    const sortedData = filtered.sort((a, b) => a.order - b.order);
+    setFilteredData(sortedData);
+    setDisplayedItems(sortedData.slice(0, INITIAL_LOAD_COUNT));
+    setVisibleCount(INITIAL_LOAD_COUNT);
+    if (sortedData.length > 0) {
+      setSelectedEmoji(sortedData[0]);
+    }
+  }, [filterTag, filterGroup]);
 
   // Load more items when scrolling to bottom
   const loadMoreItems = useCallback(() => {
@@ -71,8 +74,17 @@ function App() {
   const handleTagClick = (tag) => {
     setFilterTag(tag);
     // Apply filter immediately with the new tag
-    const filtered = data.filter(item => 
-      item.tags.some(itemTag => itemTag.toLowerCase().includes(tag.toLowerCase()))
+    let filtered = data;
+    
+    // Apply group filter if selected
+    if (filterGroup) {
+      filtered = filtered.filter(item => item.group === filterGroup);
+    }
+    
+    // Apply tag/annotation filter
+    filtered = filtered.filter(item => 
+      item.tags.some(itemTag => itemTag.toLowerCase().includes(tag.toLowerCase())) ||
+      item.annotation.toLowerCase().includes(tag.toLowerCase())
     ).sort((a, b) => a.order - b.order);
     
     setFilteredData(filtered);
@@ -83,12 +95,43 @@ function App() {
     }
   };
 
+  // Handle group change
+  const handleGroupChange = (group) => {
+    setFilterGroup(group);
+    // Apply filter immediately with the new group
+    let filtered = data;
+    
+    // Apply group filter
+    if (group) {
+      filtered = filtered.filter(item => item.group === group);
+    }
+    
+    // Apply tag/annotation filter if provided
+    if (filterTag.trim()) {
+      filtered = filtered.filter(item => 
+        item.tags.some(tag => tag.toLowerCase().includes(filterTag.toLowerCase())) ||
+        item.annotation.toLowerCase().includes(filterTag.toLowerCase())
+      );
+    }
+    
+    const sortedData = filtered.sort((a, b) => a.order - b.order);
+    setFilteredData(sortedData);
+    setDisplayedItems(sortedData.slice(0, INITIAL_LOAD_COUNT));
+    setVisibleCount(INITIAL_LOAD_COUNT);
+    if (sortedData.length > 0) {
+      setSelectedEmoji(sortedData[0]);
+    }
+  };
+
   return (
     <div className="app">
       <Header 
         filterTag={filterTag}
         setFilterTag={setFilterTag}
+        filterGroup={filterGroup}
+        setFilterGroup={setFilterGroup}
         handleFilter={handleFilter}
+        handleGroupChange={handleGroupChange}
       />
 
       <div className="main-container">

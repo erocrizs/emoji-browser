@@ -13,6 +13,8 @@
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .header h1 {
@@ -59,6 +61,28 @@
   border-color: rgba(255, 255, 255, 0.5);
 }
 
+.group-filter-section {
+  display: flex;
+  align-items: center;
+}
+
+.group-select {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  outline: none;
+  min-width: 150px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #333;
+  cursor: pointer;
+}
+
+.group-select:focus {
+  background-color: white;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .header-content {
@@ -73,6 +97,16 @@
   
   .filter-input {
     flex: 1;
+    min-width: auto;
+  }
+  
+  .group-filter-section {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .group-select {
+    width: 100%;
     min-width: auto;
   }
 }
